@@ -199,15 +199,13 @@ export default function TipForm({ contractAddress, onTipSent }: TipFormProps) {
   /**
    * QUICK AMOUNT BUTTONS
    * 
-   * Predefined amounts for common tip values in ETH.
-   * Makes it easier for users to select standard amounts without typing.
-   * Values chosen to represent different tip levels:
-   * - 0.001 ETH: Small tip (~$2 at $2000/ETH)
-   * - 0.01 ETH: Medium tip (~$20)
-   * - 0.1 ETH: Large tip (~$200)
-   * - 1.0 ETH: Very large tip (~$2000)
+   * Updated with smaller amounts for testing and limited ETH scenarios:
+   * - 0.000001 ETH: Micro tip (1 microether, ~$0.002 at $2000/ETH)
+   * - 0.00001 ETH: Small tip (10 microether, ~$0.02)
+   * - 0.0001 ETH: Medium tip (0.1 milliether, ~$0.20)
+   * - 0.001 ETH: Standard tip (1 milliether, ~$2)
    */
-  const quickAmounts = ['0.001', '0.01', '0.1', '1.0'];
+  const quickAmounts = ['0.000001', '0.00001', '0.0001', '0.001'];
 
   /**
    * HYDRATION SAFETY CHECK
@@ -284,11 +282,11 @@ export default function TipForm({ contractAddress, onTipSent }: TipFormProps) {
             {/* Main amount input field with number validation */}
             <input
               type="number"
-              step="0.001"        // Allow 3 decimal places for precision
+              step="0.000001"     // Allow 6 decimal places for micro-transactions
               min="0"             // Prevent negative amounts
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
-              placeholder="0.001"
+              placeholder="0.000001"
               className="w-full px-4 py-3 bg-black/30 border border-white/20 rounded-xl 
                        text-white placeholder-gray-400 focus:border-blue-400 focus:outline-none
                        focus:ring-2 focus:ring-blue-400/20 transition-all duration-300
