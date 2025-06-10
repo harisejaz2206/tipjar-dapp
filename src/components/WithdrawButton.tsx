@@ -215,7 +215,10 @@ export default function WithdrawButton({
   if (!isClient) {
     return (
       <div className="glass rounded-2xl p-6 border border-white/20 backdrop-blur-xl text-center">
-        <p className="text-gray-400 font-rajdhani">Loading withdrawal...</p>
+        <div className="animate-pulse">
+          <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-gradient-to-r from-green-500/30 to-emerald-500/30"></div>
+          <p className="text-gray-400 font-rajdhani">Loading withdrawal...</p>
+        </div>
       </div>
     );
   }
@@ -228,8 +231,15 @@ export default function WithdrawButton({
    */
   if (!isConnected) {
     return (
-      <div className="glass rounded-2xl p-6 border border-white/20 backdrop-blur-xl text-center opacity-50">
-        <p className="text-gray-500 font-rajdhani">Connect wallet to access withdrawal</p>
+      <div className="glass rounded-2xl p-6 border border-white/20 backdrop-blur-xl text-center">
+        <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-gradient-to-r from-gray-500 to-gray-600 
+                      flex items-center justify-center opacity-50">
+          <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM12 17c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zM15.1 8H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
+          </svg>
+        </div>
+        <h3 className="text-lg font-orbitron font-bold text-gray-400 mb-2">Wallet Required</h3>
+        <p className="text-gray-500 font-rajdhani">Connect your wallet to access withdrawal</p>
       </div>
     );
   }
@@ -243,16 +253,33 @@ export default function WithdrawButton({
    */
   if (!isOwner) {
     return (
-      <div className="glass rounded-2xl p-6 border border-white/20 backdrop-blur-xl text-center">
-        {/* Lock icon to indicate restricted access */}
-        <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-gradient-to-r from-gray-500 to-gray-600 
-                      flex items-center justify-center opacity-50">
-          <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM12 17c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zM15.1 8H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
-          </svg>
+      <div className="glass rounded-2xl p-6 border border-white/20 backdrop-blur-xl text-center relative overflow-hidden">
+        {/* Subtle animated background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-gray-500/5 to-gray-600/5"></div>
+        
+        <div className="relative z-10">
+          <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-r from-gray-500 to-gray-600 
+                        flex items-center justify-center opacity-60">
+            <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM12 17c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zM15.1 8H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
+            </svg>
+          </div>
+          
+          <h3 className="text-xl font-orbitron font-bold text-gray-400 mb-2">Owner Access Only</h3>
+          <p className="text-gray-500 font-rajdhani leading-relaxed">
+            Only the contract owner can withdraw accumulated tips
+          </p>
+          
+          {/* Owner address display for transparency */}
+          {contractOwner && (
+            <div className="mt-4 p-3 bg-gray-500/10 border border-gray-500/30 rounded-lg">
+              <p className="text-xs text-gray-400 font-rajdhani mb-1">CONTRACT OWNER</p>
+              <p className="text-sm font-orbitron text-gray-300 break-all">
+                {contractOwner.slice(0, 6)}...{contractOwner.slice(-4)}
+              </p>
+            </div>
+          )}
         </div>
-        <h3 className="text-lg font-orbitron font-bold text-gray-400 mb-2">Owner Only</h3>
-        <p className="text-gray-500 font-rajdhani">Only the contract owner can withdraw funds</p>
       </div>
     );
   }
@@ -265,61 +292,96 @@ export default function WithdrawButton({
    * Uses green color scheme to indicate positive/success action.
    */
   return (
-    <div className="glass rounded-2xl p-6 border border-white/20 backdrop-blur-xl">
-      {/* Header Section with Icon and Title */}
-      <div className="mb-6">
-        <div className="flex items-center space-x-3 mb-4">
-          {/* Green checkmark icon with glow effect */}
-          <div className="w-12 h-12 rounded-full bg-gradient-to-r from-green-500 to-emerald-500 
-                        flex items-center justify-center glow-green">
-            <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-            </svg>
+    <div className="glass rounded-2xl p-6 border border-white/20 backdrop-blur-xl relative overflow-hidden">
+      {/* Animated background glow */}
+      <div className="absolute inset-0 bg-gradient-to-r from-green-500/5 via-transparent to-emerald-500/5 animate-pulse"></div>
+      
+      <div className="relative z-10">
+        {/* Header section */}
+        <div className="mb-6">
+          <div className="flex items-center space-x-4 mb-4">
+            {/* Enhanced icon with double glow effect */}
+            <div className="relative">
+              <div className="w-14 h-14 rounded-full bg-gradient-to-r from-green-500 to-emerald-500 
+                            flex items-center justify-center glow-green">
+                <svg className="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                </svg>
+              </div>
+              {/* Pulsing ring */}
+              <div className="absolute inset-0 rounded-full border-2 border-green-400/30 animate-ping"></div>
+            </div>
+            
+            <div>
+              <h2 className="text-2xl font-orbitron font-bold text-white mb-1">Withdraw Tips</h2>
+              <p className="text-gray-300 font-rajdhani">Transfer all accumulated tips to your wallet</p>
+            </div>
           </div>
-          <div>
-            <h2 className="text-xl font-orbitron font-bold text-white">Withdraw Funds</h2>
-            <p className="text-gray-300 font-rajdhani">Transfer accumulated tips to your wallet</p>
+
+          {/* Owner verification badge */}
+          <div className="flex items-center space-x-2 mb-4">
+            <div className="px-3 py-1 bg-green-500/20 border border-green-500/30 rounded-full">
+              <span className="text-xs text-green-300 font-rajdhani font-medium">✓ VERIFIED OWNER</span>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* ERROR DISPLAY SECTION */}
-      {/* Only shows when there's an error to display */}
-      {error && (
-        <div className="mb-4 p-4 bg-red-500/20 border border-red-500/50 rounded-lg">
-          <p className="text-red-300 font-rajdhani">{error}</p>
-        </div>
-      )}
-
-      {/* WITHDRAWAL BUTTON */}
-      <button
-        onClick={handleWithdraw}
-        disabled={isLoading} // Disable during withdrawal process
-        className="w-full py-4 px-8 bg-gradient-to-r from-green-500 to-emerald-500 
-                 hover:from-green-600 hover:to-emerald-600 rounded-xl text-white font-orbitron 
-                 font-bold text-lg transition-all duration-300 transform hover:scale-105
-                 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none
-                 border border-green-400/50 glow-green hover:glow-emerald"
-      >
-        {isLoading ? (
-          // Loading state: spinner animation + text
-          <div className="flex items-center justify-center space-x-2">
-            <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-            <span>Processing Withdrawal...</span>
+        {/* Error display */}
+        {error && (
+          <div className="mb-6 p-4 bg-red-500/20 border border-red-500/50 rounded-xl">
+            <div className="flex items-center space-x-2">
+              <svg className="w-5 h-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+              </svg>
+              <p className="text-red-300 font-rajdhani">{error}</p>
+            </div>
           </div>
-        ) : (
-          // Normal state: withdrawal action text
-          'Withdraw All Tips'
         )}
-      </button>
 
-      {/* INFORMATIONAL FOOTER */}
-      {/* Explains the withdrawal functionality and security */}
-      <div className="mt-4 p-4 bg-green-500/10 border border-green-500/30 rounded-lg">
-        <p className="text-sm text-green-300 font-rajdhani">
-          🔒 As the contract owner, you can withdraw all accumulated tips to your wallet.
-          This action will transfer all ETH from the contract to your address.
-        </p>
+        {/* Main withdrawal button */}
+        <button
+          onClick={handleWithdraw}
+          disabled={isLoading}
+          className="w-full py-5 px-8 bg-gradient-to-r from-green-500 to-emerald-500 
+                   hover:from-green-600 hover:to-emerald-600 rounded-2xl text-white font-orbitron 
+                   font-bold text-lg transition-all duration-300 transform hover:scale-105
+                   disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none
+                   border border-green-400/50 glow-green hover:glow-emerald shadow-2xl
+                   active:scale-95"
+        >
+          {isLoading ? (
+            <div className="flex items-center justify-center space-x-3">
+              <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+              <span>Processing Withdrawal...</span>
+            </div>
+          ) : (
+            <div className="flex items-center justify-center space-x-3">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
+                      d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
+              </svg>
+              <span>Withdraw All Tips</span>
+            </div>
+          )}
+        </button>
+
+        {/* Informational footer */}
+        <div className="mt-6 p-4 bg-green-500/10 border border-green-500/30 rounded-xl">
+          <div className="flex items-start space-x-2">
+            <svg className="w-5 h-5 text-green-400 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+            </svg>
+            <div>
+              <p className="text-sm text-green-300 font-rajdhani font-medium mb-1">
+                Secure Withdrawal Process
+              </p>
+              <p className="text-xs text-green-300/80 font-rajdhani leading-relaxed">
+                This action will transfer all ETH from the tip jar contract to your wallet. 
+                Transaction fees will apply for the blockchain operation.
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
